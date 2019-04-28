@@ -1,0 +1,3 @@
+{
+  "mongoURI": "mongodb+srv://GraduS:graduspass@cluster0-7t1fj.mongodb.net/booking-events?retryWrites=true"
+}
