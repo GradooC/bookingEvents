@@ -34,4 +34,21 @@ const EventInputType = new GraphQLInputObjectType({
   }
 });
 
-module.exports = { EventType, EventInputType };
+const UserType = new GraphQLObjectType({
+  name: 'User',
+  fields: {
+    _id: { type: new GraphQLNonNull(GraphQLID) },
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: GraphQLString }
+  }
+});
+
+const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInput',
+  fields: {
+    email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) }
+  }
+});
+
+module.exports = { EventType, EventInputType, UserType, UserInputType };
