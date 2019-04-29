@@ -9,16 +9,24 @@ const {
   GraphQLList,
   GraphQLInputObjectType
 } = require('graphql');
+const User = require('./models/User');
+const Event = require('./models/Event');
 
 const EventType = new GraphQLObjectType({
   name: 'Event',
-  fields: {
+  fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: new GraphQLNonNull(GraphQLString) },
     price: { type: new GraphQLNonNull(GraphQLFloat) },
-    date: { type: new GraphQLNonNull(GraphQLString) }
-  }
+    date: { type: new GraphQLNonNull(GraphQLString) },
+    creator: {
+      type: new GraphQLNonNull(UserType),
+      resolve(parent, args) {
+        return User.findById(parent.creator);
+      }
+    }
+  })
 });
 
 const EventInputType = new GraphQLInputObjectType({
@@ -36,11 +44,17 @@ const EventInputType = new GraphQLInputObjectType({
 
 const UserType = new GraphQLObjectType({
   name: 'User',
-  fields: {
+  fields: () => ({
     _id: { type: new GraphQLNonNull(GraphQLID) },
     email: { type: new GraphQLNonNull(GraphQLString) },
-    password: { type: GraphQLString }
-  }
+    password: { type: GraphQLString },
+    createdEvents: {
+      type: new GraphQLList(EventType),
+      resolve(parent, args) {
+        return Event.find({ creator: parent._id });
+      }
+    }
+  })
 });
 
 const UserInputType = new GraphQLInputObjectType({

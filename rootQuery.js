@@ -7,12 +7,13 @@ const RootQuery = new GraphQLObjectType({
   fields: {
     events: {
       type: new GraphQLList(EventType),
-      resolve(parent, args) {
-        return Event.find()
-          .then(events => events)
-          .catch(err => {
-            throw err;
-          });
+      async resolve(parent, args) {
+        try {
+          const events = await Event.find();
+          return events;
+        } catch (error) {
+          throw err;
+        }
       }
     }
   }

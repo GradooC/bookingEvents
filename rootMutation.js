@@ -62,9 +62,9 @@ const RootMutation = new GraphQLObjectType({
         const { email, password } = args.user;
 
         try {
-          const existedUser = await User.findOne({ email });
+          const existingUser = await User.findOne({ email });
 
-          if (existedUser) {
+          if (existingUser) {
             throw new Error('User already exists');
           }
 
