@@ -127,8 +127,8 @@ const RootMutation = new GraphQLObjectType({
         try {
           const { isAuth } = req;
           const { bookingId } = args;
-          
-          if (!req.isAuth) {
+
+          if (!isAuth) {
             throw new Error('Unauthenticated');
           }
 
