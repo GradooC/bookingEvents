@@ -3,11 +3,10 @@ const {
   GraphQLNonNull,
   GraphQLID,
   GraphQLFloat,
-  GraphQLInt,
   GraphQLString,
-  GraphQLBoolean,
   GraphQLList,
-  GraphQLInputObjectType
+  GraphQLInputObjectType,
+  GraphQLInt
 } = require('graphql');
 const User = require('./models/User');
 const Event = require('./models/Event');
@@ -86,10 +85,20 @@ const BookingType = new GraphQLObjectType({
   })
 });
 
+const AuthDataType = new GraphQLObjectType({
+  name: 'AuthData',
+  fields: () => ({
+    userId: { type: new GraphQLNonNull(GraphQLID) },
+    token: { type: new GraphQLNonNull(GraphQLString) },
+    tokenExpiration: { type: new GraphQLNonNull(GraphQLInt) }
+  })
+});
+
 module.exports = {
   EventType,
   EventInputType,
   UserType,
   UserInputType,
-  BookingType
+  BookingType,
+  AuthDataType
 };

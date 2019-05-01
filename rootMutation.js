@@ -10,13 +10,7 @@ const User = require('./models/User');
 const Booking = require('./models/Booking');
 
 const bcrypt = require('bcryptjs');
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLID
-} = require('graphql');
+const { GraphQLObjectType, GraphQLID } = require('graphql');
 
 const RootMutation = new GraphQLObjectType({
   name: 'RootMutationType',
@@ -27,20 +21,24 @@ const RootMutation = new GraphQLObjectType({
       args: {
         event: { type: EventInputType }
       },
-      async resolve(parent, args) {
-        const { _id, title, description, price, date } = args.event;
+      async resolve(parent, args, req) {
         try {
+          const { userId, isAuth } = req;
+          const { _id, title, description, price, date } = args.event;
+
+          if (!isAuth) {
+            throw new Error('Unauthenticated');
+          }
+
           const event = new Event({
             title,
             description,
             price,
-
-            // TEST
-            creator: '5cc5f7604907de1b08221aa0'
+            creator: userId
           });
 
           // Pass event to user.createdEvents
-          const user = await User.findById('5cc5f7604907de1b08221aa0');
+          const user = await User.findById(userId);
           if (!user) {
             throw new Error('User not found');
           }
@@ -95,13 +93,19 @@ const RootMutation = new GraphQLObjectType({
       args: {
         eventId: { type: GraphQLID }
       },
-      async resolve(parent, args) {
-        const { eventId } = args;
+      async resolve(parent, args, req) {
         try {
+          const { userId, isAuth } = req;
+          const { eventId } = args;
+
+          if (!isAuth) {
+            throw new Error('Unauthenticated');
+          }
+
           const event = await Event.findOne({ _id: eventId });
 
           const booking = new Booking({
-            userId: '5cc5f7604907de1b08221aa0',
+            userId: userId,
             eventId: event._id
           });
 
@@ -119,9 +123,15 @@ const RootMutation = new GraphQLObjectType({
       args: {
         bookingId: { type: GraphQLID }
       },
-      async resolve(parent, args) {
-        const { bookingId } = args;
+      async resolve(parent, args, req) {
         try {
+          const { isAuth } = req;
+          const { bookingId } = args;
+          
+          if (!req.isAuth) {
+            throw new Error('Unauthenticated');
+          }
+
           const deletedBooking = await Booking.findOneAndDelete({
             _id: bookingId
           }).populate('eventId');

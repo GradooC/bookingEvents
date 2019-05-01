@@ -6,6 +6,7 @@ const config = require('config');
 
 const RootQuery = require('./rootQuery');
 const RootMutation = require('./rootMutation');
+const auth = require('./middleware/auth');
 
 const schema = new GraphQLSchema({
   query: RootQuery,
@@ -16,6 +17,9 @@ const app = express();
 
 // BodyParser Middleware
 app.use(express.json());
+
+// Auth middleware
+app.use(auth);
 
 // DB Config
 const db = config.get('mongoURI');
