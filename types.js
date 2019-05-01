@@ -65,4 +65,31 @@ const UserInputType = new GraphQLInputObjectType({
   }
 });
 
-module.exports = { EventType, EventInputType, UserType, UserInputType };
+const BookingType = new GraphQLObjectType({
+  name: 'Booking',
+  fields: () => ({
+    _id: { type: new GraphQLNonNull(GraphQLID) },
+    event: {
+      type: new GraphQLNonNull(EventType),
+      resolve(parent, args) {
+        return Event.findById(parent.eventId);
+      }
+    },
+    user: {
+      type: new GraphQLNonNull(UserType),
+      resolve(parent, args) {
+        return User.findById(parent.userId);
+      }
+    },
+    createdAt: { type: new GraphQLNonNull(GraphQLString) },
+    updatedAt: { type: new GraphQLNonNull(GraphQLString) }
+  })
+});
+
+module.exports = {
+  EventType,
+  EventInputType,
+  UserType,
+  UserInputType,
+  BookingType
+};
