@@ -3,6 +3,7 @@ const graphqlHTTP = require('express-graphql');
 const { GraphQLSchema } = require('graphql');
 const mongoose = require('mongoose');
 const config = require('config');
+const cors = require('cors');
 
 const RootQuery = require('./rootQuery');
 const RootMutation = require('./rootMutation');
@@ -14,6 +15,9 @@ const schema = new GraphQLSchema({
 });
 
 const app = express();
+
+// Allow cross-origin
+app.use(cors());
 
 // BodyParser Middleware
 app.use(express.json());
