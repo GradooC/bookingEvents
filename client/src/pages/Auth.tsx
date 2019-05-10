@@ -10,7 +10,7 @@ import {
   IconButton
 } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import PersonIcon from '@material-ui/icons/PersonRounded';
+import RegIcon from '@material-ui/icons/HowToRegRounded';
 import PersonAddIcon from '@material-ui/icons/PersonAddRounded';
 import Visibility from '@material-ui/icons/VisibilityRounded';
 import VisibilityOff from '@material-ui/icons/VisibilityOffRounded';
@@ -140,7 +140,7 @@ const Auth: React.FC = () => {
           <Paper elevation={3} className={classes.paper}>
             <MyZoom isVisible={isSignIn}>
               <Avatar className={classes.avatar}>
-                <PersonIcon className={classes.icon} />
+                <RegIcon className={classes.icon} />
               </Avatar>
             </MyZoom>
             <MyZoom isVisible={!isSignIn}>
@@ -204,7 +204,7 @@ const Auth: React.FC = () => {
                   <Button
                     className={classes.btn}
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     size="large"
                     onClick={btn.clickHandler(client)}
                   >
